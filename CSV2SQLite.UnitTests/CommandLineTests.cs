@@ -15,11 +15,44 @@ namespace CSV2SQLite.UnitTests
         }
 
         [Test]
-        public void Something()
+        public void CallWithNoParametersShouldFail()
         {
             var args = new string[0];
 
             Assert.IsFalse(_generator.IsValidCommandLine(args));
+        }
+
+        [Test]
+        public void CallWithOneParameterShouldSucceed()
+        {
+            var args = new[] {"input.csv"};
+
+            Assert.IsTrue(_generator.IsValidCommandLine(args));
+        }
+        
+        [Test]
+        public void CallWithTwoParametersShouldSucceed()
+        {
+            var args = new[]
+            {
+                "input.csv",
+                "output.sql"
+            };
+
+            Assert.IsTrue(_generator.IsValidCommandLine(args));
+        }
+
+        [Test]
+        public void CallWithThreeParametersShouldSucceed()
+        {
+            var args = new[]
+            {
+                "input.csv",
+                "output.sql",
+                "config.json"
+            };
+
+            Assert.IsTrue(_generator.IsValidCommandLine(args));
         }
     }
 }
