@@ -1,4 +1,5 @@
 ﻿using CSV2SQLite.App;
+using Moq;
 using NUnit.Framework;
 
 namespace CSV2SQLite.UnitTests
@@ -7,11 +8,14 @@ namespace CSV2SQLite.UnitTests
     public class CommandLineTests
     {
         private SQLiteGenerator _generator;
+        private Mock<IFileWrapper> _fileWrapper;
 
         [SetUp]
         public void Setup()
         {
-            _generator = new SQLiteGenerator();
+            _fileWrapper = new Mock<IFileWrapper>();
+            _fileWrapper.Setup(m => m.Exists(It.IsAny<string>())).Returns(true);
+            _generator = new SQLiteGenerator(_fileWrapper.Object);
         }
 
         [Test]
@@ -26,7 +30,6 @@ namespace CSV2SQLite.UnitTests
         public void CallWithOneParameterShouldSucceed()
         {
             var args = new[] {"input.csv"};
-
             Assert.IsTrue(_generator.IsValidCommandLine(args));
         }
         
@@ -53,12 +56,6 @@ namespace CSV2SQLite.UnitTests
             };
 
             Assert.IsTrue(_generator.IsValidCommandLine(args));
-        }
-
-        [Test]
-        public void FirstParameterShouldPointToAFile()
-        {
-            
         }
     }
 }
