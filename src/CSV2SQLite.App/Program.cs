@@ -18,7 +18,7 @@ namespace CSV2SQLite.App
 
         private static void DisplayDefaultHelpText()
         {
-            const string text = "Usage: csv2sqlite <input.csv> [output.csv] [config.json]\n\n" +
+            const string text = "Usage: csv2sqlite <input.csv> [output.sql] [config.json]\n\n" +
                                 "The input file is required, the other parameters are optional.";
 
             Console.WriteLine(text);
