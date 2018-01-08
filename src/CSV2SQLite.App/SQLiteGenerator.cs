@@ -1,6 +1,6 @@
 ﻿namespace CSV2SQLite.App
 {
-    internal class SQLiteGenerator
+    public class SQLiteGenerator
     {
         public bool IsValidCommandLine(string[] args)
         {
