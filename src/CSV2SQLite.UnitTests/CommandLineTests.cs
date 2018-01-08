@@ -54,5 +54,11 @@ namespace CSV2SQLite.UnitTests
 
             Assert.IsTrue(_generator.IsValidCommandLine(args));
         }
+
+        [Test]
+        public void FirstParameterShouldPointToAFile()
+        {
+            
+        }
     }
 }
