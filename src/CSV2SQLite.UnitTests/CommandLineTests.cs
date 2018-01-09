@@ -1,4 +1,5 @@
 ﻿using CSV2SQLite.App;
+using CSV2SQLite.App.Interfaces;
 using Moq;
 using NUnit.Framework;
 

@@ -1,6 +1,7 @@
 ﻿using System.IO;
+using CSV2SQLite.App.Interfaces;
 
-namespace CSV2SQLite.App
+namespace CSV2SQLite.App.Implementation
 {
     internal class FileWrapper : IFileWrapper
     {

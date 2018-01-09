@@ -1,4 +1,7 @@
-﻿namespace CSV2SQLite.App
+﻿using CSV2SQLite.App.Implementation;
+using CSV2SQLite.App.Interfaces;
+
+namespace CSV2SQLite.App
 {
     public class SQLiteGenerator
     {

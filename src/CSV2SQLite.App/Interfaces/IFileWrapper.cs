@@ -1,4 +1,4 @@
-﻿namespace CSV2SQLite.App
+﻿namespace CSV2SQLite.App.Interfaces
 {
     public interface IFileWrapper
     {
