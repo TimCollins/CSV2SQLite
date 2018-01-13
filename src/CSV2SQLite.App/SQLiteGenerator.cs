@@ -6,15 +6,19 @@ namespace CSV2SQLite.App
     public class SQLiteGenerator
     {
         private readonly IFileWrapper _fileWrapper;
+        //private readonly ICsvParser _csvParser;
 
         public SQLiteGenerator()
         {
             _fileWrapper = new FileWrapper();
+            //_csvParser = new CsvParser();
         }
 
         public SQLiteGenerator(IFileWrapper fileWrapper)
+        //public SQLiteGenerator(IFileWrapper fileWrapper, ICsvParser csvParser)
         {
             _fileWrapper = fileWrapper;
+            //_csvParser = csvParser;
         }
 
         public bool IsValidCommandLine(string[] args)
@@ -35,6 +39,10 @@ namespace CSV2SQLite.App
             }
 
             return false;
+        }
+
+        public void Generate(string input)
+        {
         }
     }
 }
