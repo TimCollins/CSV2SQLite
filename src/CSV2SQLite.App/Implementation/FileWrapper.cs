@@ -10,6 +10,11 @@ namespace CSV2SQLite.App.Implementation
             return File.Exists(path);
         }
 
+        public StreamReader Open(string path)
+        {
+            return new StreamReader(path);
+        }
+
         public string[] GetHeaderData(string path)
         {
             var reader = File.OpenText(path);
