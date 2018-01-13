@@ -9,5 +9,20 @@ namespace CSV2SQLite.App.Implementation
         {
             return File.Exists(path);
         }
+
+        public string[] GetHeaderData(string path)
+        {
+            var reader = File.OpenText(path);
+            var header = reader.ReadLine();
+
+            if (header == null)
+            {
+                return new string[0];
+            }
+
+            var columns = header.Split(',');
+
+            return columns;
+        }
     }
 }
