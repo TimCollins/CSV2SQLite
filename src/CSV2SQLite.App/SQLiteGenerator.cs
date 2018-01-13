@@ -65,9 +65,42 @@ namespace CSV2SQLite.App
                     tableDefinition.Append(Environment.NewLine);
                 }
 
-                tableDefinition.Append(")");
+                tableDefinition.Append(")" + Environment.NewLine);
+
+                var data = stream.ReadLine();
+                while (!string.IsNullOrEmpty(data))
+                {
+                    var insert = new StringBuilder("INSERT INTO test (");
+                    for (int i = 0; i < columns.Length; i++)
+                    {
+                        insert.Append(columns[i]);
+                        if (i < columns.Length - 1)
+                        {
+                            insert.Append(",");
+                        }
+                    }
+
+                    insert.Append(")" + Environment.NewLine);
+
+                    var rowValues = data.Split(',');
+                    insert.Append("VALUES (");
+
+                    for (var i = 0; i < rowValues.Length; i++)
+                    {
+                        insert.Append(string.Format("'{0}'", rowValues[i]));
+                        if (i < rowValues.Length - 1)
+                        {
+                            insert.Append(", ");
+                        }
+                    }
+
+                    insert.Append(");" + Environment.NewLine);
+                    tableDefinition.Append(insert);
+
+                    data = stream.ReadLine();
+                }
+
                 Console.WriteLine(tableDefinition.ToString());
-                // Then loop through the rest of the file adding the lines as insert statements.
             }
         }
     }
