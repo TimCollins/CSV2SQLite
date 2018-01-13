@@ -1,4 +1,5 @@
-﻿using CSV2SQLite.App.Implementation;
+﻿using System;
+using CSV2SQLite.App.Implementation;
 using CSV2SQLite.App.Interfaces;
 
 namespace CSV2SQLite.App
@@ -6,19 +7,15 @@ namespace CSV2SQLite.App
     public class SQLiteGenerator
     {
         private readonly IFileWrapper _fileWrapper;
-        //private readonly ICsvParser _csvParser;
 
         public SQLiteGenerator()
         {
             _fileWrapper = new FileWrapper();
-            //_csvParser = new CsvParser();
         }
 
         public SQLiteGenerator(IFileWrapper fileWrapper)
-        //public SQLiteGenerator(IFileWrapper fileWrapper, ICsvParser csvParser)
         {
             _fileWrapper = fileWrapper;
-            //_csvParser = csvParser;
         }
 
         public bool IsValidCommandLine(string[] args)
@@ -41,8 +38,24 @@ namespace CSV2SQLite.App
             return false;
         }
 
-        public void Generate(string input)
+        public void Generate(string inputFile, string outputFile)
         {
+            using (var stream = _fileWrapper.Open(inputFile))
+            {
+                var header = stream.ReadLine();
+                if (string.IsNullOrEmpty(header))
+                {
+                    return;
+                }
+
+                var columns = header.Split(',');
+                Console.WriteLine(columns.Length);
+                foreach (var column in columns)
+                {
+                    Console.WriteLine(column);
+                }
+                
+            }
         }
     }
 }
