@@ -6,5 +6,6 @@ namespace CSV2SQLite.App.Interfaces
     {
         bool Exists(string path);
         StreamReader Open(string path);
+        void WriteText(string tableDefinition, string outputFile);
     }
 }

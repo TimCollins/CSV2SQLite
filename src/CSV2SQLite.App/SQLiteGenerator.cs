@@ -100,6 +100,8 @@ namespace CSV2SQLite.App
                     data = stream.ReadLine();
                 }
 
+                _fileWrapper.WriteText(tableDefinition.ToString(), outputFile);
+
                 Console.WriteLine(tableDefinition.ToString());
             }
         }

@@ -15,19 +15,9 @@ namespace CSV2SQLite.App.Implementation
             return new StreamReader(path);
         }
 
-        public string[] GetHeaderData(string path)
+        public void WriteText(string text, string outputFile)
         {
-            var reader = File.OpenText(path);
-            var header = reader.ReadLine();
-
-            if (header == null)
-            {
-                return new string[0];
-            }
-
-            var columns = header.Split(',');
-
-            return columns;
+            File.WriteAllText(outputFile, text);
         }
     }
 }
