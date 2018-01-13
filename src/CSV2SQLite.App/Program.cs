@@ -13,6 +13,9 @@ namespace CSV2SQLite.App
                 DisplayDefaultHelpText();
             }
 
+            Console.WriteLine("Working on {0}", args[0]);
+            generator.Generate(args[0], "output.sql");
+
             ConsoleUtils.WaitForEscape();
         }
 
