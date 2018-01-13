@@ -44,7 +44,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConsoleUtils.cs" />
+    <Compile Include="Implementation\CsvParser.cs" />
     <Compile Include="Implementation\FileWrapper.cs" />
+    <Compile Include="Interfaces\ICsvParser.cs" />
     <Compile Include="Interfaces\IFileWrapper.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
