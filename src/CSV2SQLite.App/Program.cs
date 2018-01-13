@@ -12,11 +12,13 @@ namespace CSV2SQLite.App
             {
                 DisplayDefaultHelpText();
             }
+            else
+            {
+                Console.WriteLine("Working on {0}", args[0]);
+                generator.Generate(args[0], "output.sql");
 
-            Console.WriteLine("Working on {0}", args[0]);
-            generator.Generate(args[0], "output.sql");
-
-            ConsoleUtils.WaitForEscape();
+                ConsoleUtils.WaitForEscape();
+            }
         }
 
         private static void DisplayDefaultHelpText()
