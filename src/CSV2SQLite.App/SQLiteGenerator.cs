@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using CSV2SQLite.App.Implementation;
 using CSV2SQLite.App.Interfaces;
 
@@ -40,6 +41,8 @@ namespace CSV2SQLite.App
 
         public void Generate(string inputFile, string outputFile)
         {
+            var tableDefinition = new StringBuilder();
+
             using (var stream = _fileWrapper.Open(inputFile))
             {
                 var header = stream.ReadLine();
@@ -47,14 +50,24 @@ namespace CSV2SQLite.App
                 {
                     return;
                 }
+                tableDefinition.Append("CREATE TABLE test (" + Environment.NewLine);
+                tableDefinition.Append("\tid integer PRIMARY KEY," + Environment.NewLine);
 
                 var columns = header.Split(',');
-                Console.WriteLine(columns.Length);
-                foreach (var column in columns)
+
+                for (int i = 0; i < columns.Length; i++)
                 {
-                    Console.WriteLine(column);
+                    tableDefinition.Append(string.Format("\t{0} text", columns[i]));
+                    if (i < columns.Length - 1)
+                    {
+                        tableDefinition.Append(",");
+                    }
+                    tableDefinition.Append(Environment.NewLine);
                 }
-                
+
+                tableDefinition.Append(")");
+                Console.WriteLine(tableDefinition.ToString());
+                // Then loop through the rest of the file adding the lines as insert statements.
             }
         }
     }
