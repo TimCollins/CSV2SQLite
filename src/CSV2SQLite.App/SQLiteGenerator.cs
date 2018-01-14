@@ -67,18 +67,11 @@ namespace CSV2SQLite.App
                     insert.Append(")" + Environment.NewLine);
 
                     var rowValues = data.Split(',');
+
                     insert.Append("VALUES (");
-
-                    for (var i = 0; i < rowValues.Length; i++)
-                    {
-                        insert.Append(string.Format("'{0}'", rowValues[i]));
-                        if (i < rowValues.Length - 1)
-                        {
-                            insert.Append(", ");
-                        }
-                    }
-
+                    insert.Append(AddValues(rowValues));
                     insert.Append(");" + Environment.NewLine);
+
                     tableDefinition.Append(insert);
 
                     data = stream.ReadLine();
@@ -88,6 +81,21 @@ namespace CSV2SQLite.App
 
                 Console.WriteLine(tableDefinition.ToString());
             }
+        }
+
+        private string AddValues(IReadOnlyList<string> values)
+        {
+            var output = new StringBuilder();
+            for (var i = 0; i < values.Count; i++)
+            {
+                output.Append(string.Format("'{0}'", values[i]));
+                if (i < values.Count - 1)
+                {
+                    output.Append(", ");
+                }
+            }
+
+            return output.ToString();
         }
 
         private string AddInsertColumns(IReadOnlyList<string> columns)
