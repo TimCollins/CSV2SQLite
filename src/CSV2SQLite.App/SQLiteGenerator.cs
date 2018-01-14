@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text;
 using CSV2SQLite.App.Implementation;
 using CSV2SQLite.App.Interfaces;
@@ -55,23 +56,14 @@ namespace CSV2SQLite.App
 
                 var columns = header.Split(',');
 
-                for (int i = 0; i < columns.Length; i++)
-                {
-                    tableDefinition.Append(string.Format("\t{0} text", columns[i]));
-                    if (i < columns.Length - 1)
-                    {
-                        tableDefinition.Append(",");
-                    }
-                    tableDefinition.Append(Environment.NewLine);
-                }
-
-                tableDefinition.Append(")" + Environment.NewLine);
+                tableDefinition.Append(AddColumns(columns));
+                tableDefinition.Append(");" + Environment.NewLine);
 
                 var data = stream.ReadLine();
                 while (!string.IsNullOrEmpty(data))
                 {
                     var insert = new StringBuilder("INSERT INTO test (");
-                    for (int i = 0; i < columns.Length; i++)
+                    for (var i = 0; i < columns.Length; i++)
                     {
                         insert.Append(columns[i]);
                         if (i < columns.Length - 1)
@@ -104,6 +96,23 @@ namespace CSV2SQLite.App
 
                 Console.WriteLine(tableDefinition.ToString());
             }
+        }
+
+        private string AddColumns(IReadOnlyList<string> columns)
+        {
+            var output = new StringBuilder();
+
+            for (var i = 0; i < columns.Count; i++)
+            {
+                output.Append(string.Format("\t{0} text", columns[i]));
+                if (i < columns.Count - 1)
+                {
+                    output.Append(",");
+                }
+                output.Append(Environment.NewLine);
+            }
+
+            return output.ToString();
         }
     }
 }
