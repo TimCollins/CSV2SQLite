@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using CSV2SQLite.App.Implementation;
 using CSV2SQLite.App.Interfaces;
@@ -20,24 +21,22 @@ namespace CSV2SQLite.App
             _fileWrapper = fileWrapper;
         }
 
-        public bool IsValidCommandLine(string[] args)
+        public void ValidateCommandLine(string[] args)
         {
             if (args.Length == 0)
             {
-                return false;
+                throw new ArgumentException("No arguments provided");
             }
 
             if (args.Length > 3)
             {
-                return false;
+                throw new ArgumentException("Too many arguments provided");
             }
 
-            if (_fileWrapper.Exists(args[0]))
+            if (!_fileWrapper.Exists(args[0]))
             {
-                return true;
+                throw new FileNotFoundException(string.Format("{0} was not found", args[0]));
             }
-
-            return false;
         }
 
         public string Generate(string inputFile)
@@ -49,7 +48,7 @@ namespace CSV2SQLite.App
                 var header = stream.ReadLine();
                 if (string.IsNullOrEmpty(header))
                 {
-                    return "";
+                    return string.Empty;
                 }
                 tableDefinition.Append("CREATE TABLE test (" + Environment.NewLine);
                 tableDefinition.Append("\tid integer PRIMARY KEY," + Environment.NewLine);

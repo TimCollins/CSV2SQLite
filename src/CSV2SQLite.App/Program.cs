@@ -8,21 +8,25 @@ namespace CSV2SQLite.App
         {
             var generator = new SQLiteGenerator();
 
-            if (!generator.IsValidCommandLine(args))
+            try
             {
+                generator.ValidateCommandLine(args);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error: {0}", ex.Message);
                 DisplayDefaultHelpText();
+                return;
             }
-            else
-            {
-                Console.WriteLine("Working on {0}", args[0]);
-                var sqlData = generator.Generate(args[0]);
-                const string output = "output.sql";
-                Console.WriteLine("Generated {0} bytes", sqlData.Length);
-                generator.Write(sqlData, output);
-                Console.WriteLine("Data written to {0}", output);
 
-                ConsoleUtils.WaitForEscape();
-            }
+            Console.WriteLine("Working on {0}", args[0]);
+            var sqlData = generator.Generate(args[0]);
+            const string output = "output.sql";
+            Console.WriteLine("Generated {0} bytes", sqlData.Length);
+            generator.Write(sqlData, output);
+            Console.WriteLine("Data written to {0}", output);
+
+            ConsoleUtils.WaitForEscape();
         }
 
         private static void DisplayDefaultHelpText()
