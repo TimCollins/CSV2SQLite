@@ -40,7 +40,7 @@ namespace CSV2SQLite.App
             return false;
         }
 
-        public void Generate(string inputFile, string outputFile)
+        public string Generate(string inputFile)
         {
             var tableDefinition = new StringBuilder();
 
@@ -49,7 +49,7 @@ namespace CSV2SQLite.App
                 var header = stream.ReadLine();
                 if (string.IsNullOrEmpty(header))
                 {
-                    return;
+                    return "";
                 }
                 tableDefinition.Append("CREATE TABLE test (" + Environment.NewLine);
                 tableDefinition.Append("\tid integer PRIMARY KEY," + Environment.NewLine);
@@ -76,11 +76,14 @@ namespace CSV2SQLite.App
 
                     data = stream.ReadLine();
                 }
-
-                _fileWrapper.WriteText(tableDefinition.ToString(), outputFile);
-
-                Console.WriteLine(tableDefinition.ToString());
             }
+
+            return tableDefinition.ToString();
+        }
+
+        public void Write(string sqlData, string outputFile)
+        {
+            _fileWrapper.WriteText(sqlData, outputFile);
         }
 
         private string AddValues(IReadOnlyList<string> values)

@@ -15,7 +15,11 @@ namespace CSV2SQLite.App
             else
             {
                 Console.WriteLine("Working on {0}", args[0]);
-                generator.Generate(args[0], "output.sql");
+                var sqlData = generator.Generate(args[0]);
+                const string output = "output.sql";
+                Console.WriteLine("Generated {0} bytes", sqlData.Length);
+                generator.Write(sqlData, output);
+                Console.WriteLine("Data written to {0}", output);
 
                 ConsoleUtils.WaitForEscape();
             }
