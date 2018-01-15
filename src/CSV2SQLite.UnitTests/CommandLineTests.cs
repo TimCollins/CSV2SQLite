@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Net.Configuration;
 using CSV2SQLite.App;
 using CSV2SQLite.App.Interfaces;
 using Moq;
@@ -44,6 +43,15 @@ namespace CSV2SQLite.UnitTests
             var ex = Assert.Throws<FileNotFoundException>(() => _generator.ValidateCommandLine(args));
 
             Assert.AreEqual(ex.Message, expected);
+        }
+
+        [Test]
+        public void FirstFileMustEndInCSV()
+        {
+            var args = new[] { "input.txt" };
+
+            var ex = Assert.Throws<ArgumentException>(() => _generator.ValidateCommandLine(args));
+            Assert.AreEqual(ex.Message, "Invalid filename");
         }
 
         //[Test]

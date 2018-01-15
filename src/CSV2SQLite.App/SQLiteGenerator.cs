@@ -37,6 +37,11 @@ namespace CSV2SQLite.App
             {
                 throw new FileNotFoundException(string.Format("{0} was not found", args[0]));
             }
+
+            if (!args[0].ToLower().EndsWith(".csv"))
+            {
+                throw new ArgumentException("Invalid filename");
+            }
         }
 
         public string Generate(string inputFile)
@@ -48,8 +53,9 @@ namespace CSV2SQLite.App
                 var header = stream.ReadLine();
                 if (string.IsNullOrEmpty(header))
                 {
-                    return string.Empty;
+                    throw new CsvHeaderException(string.Format("{0} is empty", inputFile));
                 }
+
                 tableDefinition.Append("CREATE TABLE test (" + Environment.NewLine);
                 tableDefinition.Append("\tid integer PRIMARY KEY," + Environment.NewLine);
 
