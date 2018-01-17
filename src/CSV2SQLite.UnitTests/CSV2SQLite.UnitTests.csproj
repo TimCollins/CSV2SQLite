@@ -59,6 +59,7 @@
   <ItemGroup>
     <Compile Include="CommandLineTests.cs" />
     <Compile Include="CsvParserTests.cs" />
+    <Compile Include="GeneratorTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
