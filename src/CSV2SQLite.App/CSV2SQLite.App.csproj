@@ -49,7 +49,8 @@
   <ItemGroup>
     <Compile Include="Configuration.cs" />
     <Compile Include="ConsoleUtils.cs" />
-    <Compile Include="CsvHeaderException.cs" />
+    <Compile Include="Exceptions\CsvHeaderException.cs" />
+    <Compile Include="Exceptions\InvalidCommandLineException.cs" />
     <Compile Include="Implementation\CsvParser.cs" />
     <Compile Include="Implementation\FileWrapper.cs" />
     <Compile Include="Interfaces\ICsvParser.cs" />

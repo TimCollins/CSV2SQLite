@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using CSV2SQLite.App.Exceptions;
 using CSV2SQLite.App.Implementation;
 using CSV2SQLite.App.Interfaces;
 

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CSV2SQLite.App
+namespace CSV2SQLite.App.Exceptions
 {
     public class CsvHeaderException : ApplicationException
     {
