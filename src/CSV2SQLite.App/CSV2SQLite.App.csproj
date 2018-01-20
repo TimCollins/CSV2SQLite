@@ -55,6 +55,8 @@
     <Compile Include="Implementation\FileWrapper.cs" />
     <Compile Include="Interfaces\ICsvParser.cs" />
     <Compile Include="Interfaces\IFileWrapper.cs" />
+    <Compile Include="Parser\Parser.cs" />
+    <Compile Include="Parser\ParserOptions.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SQLiteGenerator.cs" />
