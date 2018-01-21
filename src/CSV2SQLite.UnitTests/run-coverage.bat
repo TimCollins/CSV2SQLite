@@ -1,0 +1,1 @@
+..\..\..\..\packages\OpenCover.4.6.519\tools\OpenCover.Console.exe -target:run-tests.bat -register:user -filter:+[csv2sqlite]*
