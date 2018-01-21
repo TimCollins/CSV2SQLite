@@ -37,7 +37,8 @@ namespace CSV2SQLite.App.Parser
 
         public string GetHelpScreen()
         {
-            return new StringBuilder("More extensive help text to go here").ToString();
+            return new StringBuilder("Usage: csv2sqlite <input.csv> [output.sql] [config.json]\n\n" +
+                                     "The input file is required, the other parameters are optional.").ToString();
         }
 
         public ParserOptions Parse()
@@ -102,7 +103,8 @@ namespace CSV2SQLite.App.Parser
 
         public string GetSummaryScreen()
         {
-            return new StringBuilder("Summary help text to go here").ToString();
+            return new StringBuilder("Usage: csv2sqlite <input.csv> [output.sql] [config.json]\n\n" +
+                                     "The input file is required, the other parameters are optional.").ToString();
         }
     }
 }

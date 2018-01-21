@@ -79,13 +79,5 @@ namespace CSV2SQLite.App
                 OutputFilename = "default.sql"
             };
         }
-
-        private static void DisplayDefaultHelpText()
-        {
-            const string text = "Usage: csv2sqlite <input.csv> [output.sql] [config.json]\n\n" +
-                                "The input file is required, the other parameters are optional.";
-
-            Console.WriteLine(text);
-        }
     }
 }
