@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using CommandLineParse.App;
 using Newtonsoft.Json;
 
 namespace CSV2SQLite.App
@@ -9,28 +10,42 @@ namespace CSV2SQLite.App
     {
         static void Main(string[] args)
         {
-            var generator = new SQLiteGenerator();
+            var parser = new Parser.Parser(args);
 
-            try
+            if (!parser.IsValidCommandLine())
             {
-                generator.ValidateCommandLine(args);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Error: {0}", ex.Message);
-                DisplayDefaultHelpText();
+                Console.WriteLine("Error: Invalid command line parameters specified.");
+                Console.WriteLine(parser.GetSummaryScreen());
                 return;
             }
 
-            var config = SetConfiguration(args);
+            ParserOptions options;
+            try
+            {
+                options = parser.Parse();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error: " + ex.Message);
+                return;
+            }
 
-            Console.WriteLine("Working on {0}", args[0]);
+            if (options.ShowHelpScreen)
+            {
+                Console.WriteLine(parser.GetHelpScreen());
+                return;
+            }
 
-            var sqlData = generator.Generate(args[0]);
+            var configuration = options.UseCustomConfig 
+                ? SetConfiguration(args) 
+                : SetDefaultConfiguration();
+
+            var generator = new SQLiteGenerator();
+            var sqlData = generator.Generate(configuration);
             Console.WriteLine("Generated {0} bytes", sqlData.Length);
 
-            generator.Write(sqlData, config.OutputFilename);
-            Console.WriteLine("Data written to {0}", config.OutputFilename);
+            generator.Write(sqlData, configuration.OutputFilename);
+            Console.WriteLine("Data written to {0}", configuration.OutputFilename);
 
             ConsoleUtils.WaitForEscape();
         }
@@ -51,6 +66,8 @@ namespace CSV2SQLite.App
                 config = JsonConvert.DeserializeObject<Configuration>(json);
             }
 
+            config.InputFilename = args[0];
+
             return config;
         }
 
@@ -58,6 +75,7 @@ namespace CSV2SQLite.App
         {
             return new Configuration
             {
+                InputFilename = "input.csv",
                 OutputFilename = "default.sql"
             };
         }
