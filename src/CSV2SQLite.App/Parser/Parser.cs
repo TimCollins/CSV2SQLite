@@ -63,7 +63,6 @@ namespace CSV2SQLite.App.Parser
 
                         // The next arg should be the config file name
                         // and that file should exist
-
                         if (i > _args.Length - 2)
                         {
                             throw new InvalidCommandLineException("Custom configuration parameter specified but no configuration file supplied.");
@@ -81,16 +80,9 @@ namespace CSV2SQLite.App.Parser
                         options.UseCustomOutputFile = true;
 
                         // The next arg should be the output file name
-                        // and that file should exist                    
                         if (i > _args.Length - 2)
                         {
                             throw new InvalidCommandLineException("Custom output filename parameter specified but no output file name supplied.");
-                        }
-
-                        var file = _args[i + 1];
-                        if (!_wrapper.Exists(file))
-                        {
-                            throw new InvalidCommandLineException(string.Format("Custom output filename parameter specified but configuration file {0} was not found.", file));
                         }
 
                         options.CustomOutputFile = _args[i + 1];
