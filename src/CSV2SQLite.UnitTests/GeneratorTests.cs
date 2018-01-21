@@ -1,6 +1,6 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Text;
+using System.Text.RegularExpressions;
 using CSV2SQLite.App;
 using CSV2SQLite.App.Exceptions;
 using CSV2SQLite.App.Interfaces;
@@ -68,6 +68,24 @@ namespace CSV2SQLite.UnitTests
                 var test = string.Format("{0} text", column);
                 Assert.IsTrue(output.Contains(test));
             }
+        }
+
+        [Test]
+        public void RowDataShouldBeInsertStatementsInTheOutput()
+        {
+            const string csv = "Column1, Column2, Column3\nFred, 123, ABC\nBob, 777, ZZZ";
+            var stream = new MemoryStream(Encoding.UTF8.GetBytes(csv));
+            var streamReader = new StreamReader(stream);
+            _fileWrapper.Setup(m => m.Open(It.IsAny<string>())).Returns(streamReader);
+            var config = new Configuration
+            {
+                InputFilename = "input.csv",
+                OutputFilename = "output.sql"
+            };
+
+            var output = _generator.Generate(config);
+
+            Assert.AreEqual(2, Regex.Matches(output, "INSERT").Count);
         }
     }
 }
