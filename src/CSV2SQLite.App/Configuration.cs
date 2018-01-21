@@ -2,6 +2,7 @@
 {
     public class Configuration
     {
+        public string InputFilename { get; set; }
         public string OutputFilename { get; set; }
     }
 }
