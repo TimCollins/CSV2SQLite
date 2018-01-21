@@ -175,5 +175,44 @@ namespace CSV2SQLite.UnitTests
             Assert.IsTrue(options.UseCustomOutputFile);
             Assert.AreEqual(output, options.CustomOutputFile);
         }
+
+        [Test]
+        public void VerifyValidCommandLine()
+        {
+            var args = new[]
+            {
+                "input.csv"
+            };
+
+            var parser = new Parser(args);
+
+            Assert.IsTrue(parser.IsValidCommandLine());
+        }
+
+        [Test]
+        public void HelpScreenShouldBeShown()
+        {
+            var args = new[]
+            {
+                "input.csv"
+            };
+
+            var parser = new Parser(args);
+            var output = parser.GetHelpScreen();
+            Assert.IsTrue(output.StartsWith("Usage:"));
+        }
+
+        [Test]
+        public void SummaryScreenShouldBeShown()
+        {
+            var args = new[]
+                        {
+                "input.csv"
+            };
+
+            var parser = new Parser(args);
+            var output = parser.GetSummaryScreen();
+            Assert.IsTrue(output.StartsWith("Usage:"));
+        }
     }
 }
