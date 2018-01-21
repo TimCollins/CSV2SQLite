@@ -45,8 +45,9 @@ namespace CSV2SQLite.App
             }
         }
 
-        public string Generate(string inputFile)
+        public string Generate(Configuration configuration)
         {
+            var inputFile = configuration.InputFilename;
             var tableDefinition = new StringBuilder();
 
             using (var stream = _fileWrapper.Open(inputFile))
@@ -116,7 +117,7 @@ namespace CSV2SQLite.App
                 output.Append(columns[i]);
                 if (i < columns.Count - 1)
                 {
-                    output.Append(",");
+                    output.Append(", ");
                 }
             }
 
