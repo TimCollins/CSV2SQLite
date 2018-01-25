@@ -2,6 +2,11 @@
 > A C# console application to take a CSV file and produce a text file capable of creating an SQLite database.
 
 ## Usage
+```bash
+# The input file is required, the other parameters are optional.
+csv2sqlite <input.csv> [output.sql] [config.json]
+```
+
 
 ## Compiling
 The application was developed using Visual Studio 2015.
