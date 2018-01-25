@@ -14,18 +14,12 @@ namespace CSV2SQLite.UnitTests
     {
         private SQLiteGenerator _generator;
         private Mock<IFileWrapper> _fileWrapper;
-        //private Stream _stream;
-        //private StreamReader _streamReader;
 
         [SetUp]
         public void Setup()
         {
-            //_stream = new MemoryStream(Encoding.UTF8.GetBytes("Foo"));
-            //_streamReader = new StreamReader(_stream);
-
             _fileWrapper = new Mock<IFileWrapper>();
             _fileWrapper.Setup(m => m.Exists(It.IsAny<string>())).Returns(true);
-            //_fileWrapper.Setup(m => m.Open(It.IsAny<string>())).Returns(_streamReader);
             _generator = new SQLiteGenerator(_fileWrapper.Object);
         }
 

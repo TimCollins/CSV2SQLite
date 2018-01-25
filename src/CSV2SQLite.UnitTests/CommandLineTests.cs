@@ -54,38 +54,6 @@ namespace CSV2SQLite.UnitTests
             Assert.AreEqual(ex.Message, "Invalid filename");
         }
 
-        //[Test]
-        //public void CallWithOneParameterShouldSucceed()
-        //{
-        //    var args = new[] {"input.csv"};
-        //    Assert.IsTrue(_generator.ValidateCommandLine(args));
-        //}
-
-        //[Test]
-        //public void CallWithTwoParametersShouldSucceed()
-        //{
-        //    var args = new[]
-        //    {
-        //        "input.csv",
-        //        "output.sql"
-        //    };
-
-        //    Assert.IsTrue(_generator.ValidateCommandLine(args));
-        //}
-
-        //[Test]
-        //public void CallWithThreeParametersShouldSucceed()
-        //{
-        //    var args = new[]
-        //    {
-        //        "input.csv",
-        //        "output.sql",
-        //        "config.json"
-        //    };
-
-        //    Assert.IsTrue(_generator.ValidateCommandLine(args));
-        //}
-
         [Test]
         public void CallWithFourParametersShouldFail()
         {
