@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using CSV2SQLite.App.Interfaces;
 
 namespace CSV2SQLite.App.Implementation
@@ -18,6 +19,11 @@ namespace CSV2SQLite.App.Implementation
         public void WriteText(string text, string outputFile)
         {
             File.WriteAllText(outputFile, text);
+        }
+
+        public IEnumerable<string> GetFiles(string path, string searchPattern)
+        {
+            return Directory.GetFiles(path, searchPattern);
         }
     }
 }
