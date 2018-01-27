@@ -1,4 +1,4 @@
-﻿namespace CommandLineParse.App
+﻿namespace CSV2SQLite.App.Parser
 {
     public class ParserOptions
     {
@@ -7,5 +7,6 @@
         public string CustomConfig { get; set; }
         public bool UseCustomOutputFile { get; set; }
         public string CustomOutputFile { get; set; }
+        public bool UseWildCard { get; set; }
     }
 }

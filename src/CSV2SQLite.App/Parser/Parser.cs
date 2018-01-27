@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using System.Text;
-using CommandLineParse.App;
 using CSV2SQLite.App.Exceptions;
 using CSV2SQLite.App.Implementation;
 using CSV2SQLite.App.Interfaces;
@@ -48,8 +47,8 @@ namespace CSV2SQLite.App.Parser
             for (var i = 0; i < _args.Length; i++)
             {
                 var arg = _args[i];
-
-                var switchFound = _switches.Any(s => arg.StartsWith(s));
+                var isWildCard = IsWildCard(arg);
+                var switchFound = _switches.Any(s => arg.StartsWith(s)) || isWildCard;
 
                 if (switchFound)
                 {
@@ -87,10 +86,20 @@ namespace CSV2SQLite.App.Parser
 
                         options.CustomOutputFile = _args[i + 1];
                     }
+                    else if (isWildCard)
+                    {
+                        options.UseWildCard = true;
+                    }
+
                 }
             }
 
             return options;
+        }
+
+        private bool IsWildCard(string arg)
+        {
+            return arg.StartsWith("*.");
         }
 
         public string GetSummaryScreen()
