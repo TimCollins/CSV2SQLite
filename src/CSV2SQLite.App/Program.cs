@@ -1,7 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using CommandLineParse.App;
+using CSV2SQLite.App.Parser;
 using Newtonsoft.Json;
 
 namespace CSV2SQLite.App
@@ -36,9 +37,10 @@ namespace CSV2SQLite.App
                 return;
             }
 
-            var configuration = options.UseCustomConfig 
-                ? SetConfiguration(args) 
-                : SetDefaultConfiguration();
+            var configuration = SetConfiguration(args, options);
+            //var configuration = options.UseCustomConfig
+            //    ? SetConfiguration(args)
+            //    : SetDefaultConfiguration();
 
             var generator = new SQLiteGenerator();
             var sqlData = generator.Generate(configuration);
@@ -50,22 +52,30 @@ namespace CSV2SQLite.App
             ConsoleUtils.WaitForEscape();
         }
 
-        private static Configuration SetConfiguration(string[] args)
+        private static Configuration SetConfiguration(IReadOnlyList<string> args, ParserOptions options)
         {
-            // Find the one that ends in .json
-            var arg = args.FirstOrDefault(a => a.EndsWith(".json"));
-            if (string.IsNullOrEmpty(arg) || !File.Exists(arg))
-            {
-                return SetDefaultConfiguration();
-            }
-
             Configuration config;
-            using (var stream = new StreamReader(arg))
+            if (options.UseCustomConfig)
             {
-                var json = stream.ReadToEnd();
-                config = JsonConvert.DeserializeObject<Configuration>(json);
+                // Find the one that ends in .json
+                var arg = args.FirstOrDefault(a => a.EndsWith(".json"));
+                if (string.IsNullOrEmpty(arg) || !File.Exists(arg))
+                {
+                    return SetDefaultConfiguration();
+                }
+
+                using (var stream = new StreamReader(arg))
+                {
+                    var json = stream.ReadToEnd();
+                    config = JsonConvert.DeserializeObject<Configuration>(json);
+                }
+
+                config.InputFilename = args[0];
+
+                return config;
             }
 
+            config = SetDefaultConfiguration();
             config.InputFilename = args[0];
 
             return config;
@@ -75,7 +85,7 @@ namespace CSV2SQLite.App
         {
             return new Configuration
             {
-                InputFilename = "input.csv",
+                //InputFilename = "input.csv",
                 OutputFilename = "default.sql"
             };
         }
