@@ -22,6 +22,13 @@ namespace CSV2SQLite.UnitTests
             return new StreamReader(stream);
         }
 
+        private StreamReader GetFakeStreamReaderWithApostrophes()
+        {
+            const string csv = "Name, Sex, Bodyweight\nHomer O'Simpson,M,106kg\nGemma O'Rourke,F,65kg";
+            var stream = new MemoryStream(Encoding.UTF8.GetBytes(csv));
+            return new StreamReader(stream);
+        }
+
         [SetUp]
         public void Setup()
         {
@@ -112,7 +119,40 @@ namespace CSV2SQLite.UnitTests
         [Test]
         public void ApostrophesShouldBeEscaped()
         {
-            
+            _fileWrapper.Setup(m => m.Open(It.IsAny<string>())).Returns(GetFakeStreamReaderWithApostrophes());
+            var config = new Configuration
+            {
+                InputFilename = "input.csv",
+                OutputFilename = "output.sql"
+            };
+
+            var output = _generator.Generate(config);
+
+            // The test data has two names with apostrophes in it.
+            // Including the string start and end apostrophes there should be 16
+            Assert.AreEqual(16, Regex.Matches(output, "'").Count);
+        }
+
+        [Test]
+        public void SpacesShouldBeStripped()
+        {
+            _fileWrapper.Setup(m => m.Open(It.IsAny<string>())).Returns(GetFakeStreamReader());
+            var config = new Configuration
+            {
+                InputFilename = "input.csv",
+                OutputFilename = "output.sql"
+            };
+
+            var output = _generator.Generate(config);
+            var lines = output.Split('\n');
+
+            foreach (var line in lines)
+            {
+                if (line.StartsWith("VALUES"))
+                {
+                    Assert.IsFalse(line.Contains("' "));
+                }
+            }
         }
     }
 }
