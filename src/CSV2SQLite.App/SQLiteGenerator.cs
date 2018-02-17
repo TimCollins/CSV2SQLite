@@ -47,45 +47,73 @@ namespace CSV2SQLite.App
 
         public string Generate(Configuration configuration)
         {
-            var inputFile = configuration.InputFilename;
-            var tableDefinition = new StringBuilder();
+            var inputFiles = new List<string>();
 
-            using (var stream = _fileWrapper.Open(inputFile))
+            if (configuration.InputFilename.ToLower() == "*.csv")
             {
-                var header = stream.ReadLine();
-                if (string.IsNullOrEmpty(header))
+                foreach (var file in _fileWrapper.GetFiles(Environment.CurrentDirectory, "*.csv"))
                 {
-                    throw new CsvHeaderException(string.Format("{0} is empty", inputFile));
-                }
-
-                tableDefinition.Append("CREATE TABLE test (" + Environment.NewLine);
-                tableDefinition.Append("\tid integer PRIMARY KEY," + Environment.NewLine);
-
-                var columns = header.Split(',');
-
-                tableDefinition.Append(AddColumns(columns));
-                tableDefinition.Append(");" + Environment.NewLine);
-
-                var data = stream.ReadLine();
-                while (!string.IsNullOrEmpty(data))
-                {
-                    var insert = new StringBuilder("INSERT INTO test (");
-                    insert.Append(AddInsertColumns(columns));
-                    insert.Append(")" + Environment.NewLine);
-
-                    var rowValues = data.Split(',');
-
-                    insert.Append("VALUES (");
-                    insert.Append(AddValues(rowValues));
-                    insert.Append(");" + Environment.NewLine);
-
-                    tableDefinition.Append(insert);
-
-                    data = stream.ReadLine();
+                    inputFiles.Add(file);
                 }
             }
+            else
+            {
+                inputFiles.Add(configuration.InputFilename);
+            }
 
-            return tableDefinition.ToString();
+            var tableDefinitions = new StringBuilder();
+
+            var tableAdded = false;
+
+            foreach (var inputFile in inputFiles)
+            {
+                var tableDefinition = new StringBuilder();
+
+                using (var stream = _fileWrapper.Open(inputFile))
+                {
+                    var header = stream.ReadLine();
+                    if (string.IsNullOrEmpty(header))
+                    {
+                        throw new CsvHeaderException(string.Format("{0} is empty", inputFile));
+                    }
+
+                    var columns = header.Split(',');
+
+                    if (!tableAdded)
+                    {
+                        tableDefinition.Append("CREATE TABLE test (" + Environment.NewLine);
+                        tableDefinition.Append("\tid integer PRIMARY KEY," + Environment.NewLine);
+
+                        tableDefinition.Append(AddColumns(columns));
+                        tableDefinition.Append(");" + Environment.NewLine);
+                    }
+
+                    tableAdded = true;
+
+                    var data = stream.ReadLine();
+                    while (!string.IsNullOrEmpty(data))
+                    {
+                        var insert = new StringBuilder("INSERT INTO test (");
+                        insert.Append(AddInsertColumns(columns));
+                        insert.Append(")" + Environment.NewLine);
+
+                        var rowValues = data.Split(',');
+
+                        insert.Append("VALUES (");
+                        insert.Append(AddValues(rowValues));
+                        insert.Append(");" + Environment.NewLine);
+
+                        tableDefinition.Append(insert);
+
+                        data = stream.ReadLine();
+                    }
+                }
+
+                //return tableDefinition.ToString();
+                tableDefinitions.Append(tableDefinition);
+            }
+
+            return tableDefinitions.ToString();
         }
 
         public void Write(string sqlData, string outputFile)
