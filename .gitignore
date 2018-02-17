@@ -184,3 +184,4 @@ FakesAssemblies/
 /.vs/config/applicationhost.config
 /test.sqlite
 /notes.md
+/test.sqlite-journal
