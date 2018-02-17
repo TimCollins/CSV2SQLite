@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Text.RegularExpressions;
 using CSV2SQLite.App.Exceptions;
 using CSV2SQLite.App.Implementation;
 using CSV2SQLite.App.Interfaces;
@@ -109,7 +110,6 @@ namespace CSV2SQLite.App
                     }
                 }
 
-                //return tableDefinition.ToString();
                 tableDefinitions.Append(tableDefinition);
             }
 
@@ -126,7 +126,9 @@ namespace CSV2SQLite.App
             var output = new StringBuilder();
             for (var i = 0; i < values.Count; i++)
             {
-                output.Append(string.Format("'{0}'", values[i]));
+                var s = Regex.Replace(values[i].Trim(), "'", "''");
+
+                output.Append(string.Format("'{0}'", s));
                 if (i < values.Count - 1)
                 {
                     output.Append(", ");
