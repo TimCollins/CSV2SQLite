@@ -15,6 +15,13 @@ namespace CSV2SQLite.UnitTests
         private SQLiteGenerator _generator;
         private Mock<IFileWrapper> _fileWrapper;
 
+        private StreamReader GetFakeStreamReader()
+        {
+            const string csv = "Column1, Column2, Column3\nFred, 123, ABC\nBob, 777, ZZZ";
+            var stream = new MemoryStream(Encoding.UTF8.GetBytes(csv));
+            return new StreamReader(stream);
+        }
+
         [SetUp]
         public void Setup()
         {
@@ -67,10 +74,7 @@ namespace CSV2SQLite.UnitTests
         [Test]
         public void RowDataShouldBeInsertStatementsInTheOutput()
         {
-            const string csv = "Column1, Column2, Column3\nFred, 123, ABC\nBob, 777, ZZZ";
-            var stream = new MemoryStream(Encoding.UTF8.GetBytes(csv));
-            var streamReader = new StreamReader(stream);
-            _fileWrapper.Setup(m => m.Open(It.IsAny<string>())).Returns(streamReader);
+            _fileWrapper.Setup(m => m.Open(It.IsAny<string>())).Returns(GetFakeStreamReader());
             var config = new Configuration
             {
                 InputFilename = "input.csv",
@@ -80,6 +84,35 @@ namespace CSV2SQLite.UnitTests
             var output = _generator.Generate(config);
 
             Assert.AreEqual(2, Regex.Matches(output, "INSERT").Count);
+        }
+
+        [Test]
+        public void WildcardShouldReturnAllCSVFilesInFolder()
+        {
+            var config = new Configuration
+            {
+                InputFilename = "*.csv",
+                OutputFilename = "output.sql"
+            };
+
+            _fileWrapper.Setup(m => m.GetFiles(It.IsAny<string>(), "*.csv")).Returns(new[]
+            {
+                "one.csv",
+                "two.csv",
+                "three.csv"
+            });
+
+            _fileWrapper.Setup(m => m.Open("one.csv")).Returns(GetFakeStreamReader());
+            _fileWrapper.Setup(m => m.Open("two.csv")).Returns(GetFakeStreamReader());
+            _fileWrapper.Setup(m => m.Open("three.csv")).Returns(GetFakeStreamReader());
+
+            var output = _generator.Generate(config);
+        }
+
+        [Test]
+        public void ApostrophesShouldBeEscaped()
+        {
+            
         }
     }
 }
